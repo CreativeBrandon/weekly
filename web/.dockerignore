@@ -1,0 +1,9 @@
+.vscode/
+.github/
+.git/
+.env
+.ssl
+
+node_modules
+dist
+build

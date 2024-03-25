@@ -1,0 +1,27 @@
+version: '3.8'
+
+name: weekly-dev
+
+volumes:
+  node-modules-web:
+
+services:
+  weekly-web:
+    container_name: weekly_web
+    image: weekly-web-dev:latest
+    restart: unless-stopped
+    build:
+      context: ./web
+      dockerfile: Dockerfile.dev
+    env_file:
+      - .env
+    ports:
+      - 5173:5173
+    volumes:
+      - ./web:/app
+      - node-modules-web:/app/node_modules
+    ulimits:
+      nofile:
+        soft: 1048576
+        hard: 1048576
+  

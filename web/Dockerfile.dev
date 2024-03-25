@@ -1,0 +1,17 @@
+FROM node:20-alpine
+
+WORKDIR /app
+COPY package.json pnpm-lock.yaml ./
+
+# Install dependencies using PNPM
+RUN npm install -g pnpm && \
+    pnpm install
+
+COPY . .
+
+ENV CHOKIDAR_USEPOLLING=true
+
+# EXPOSE 24678
+EXPOSE 5173
+
+CMD ["pnpm", "dev"]
