@@ -1,17 +1,26 @@
 {
   "name": "weekly",
   "description": "<h3 align=\"center\">weekly Diary App</h3> <br/>",
+  "workspaces": [
+    "web"
+  ],
   "scripts": {
     "certs:generate": "pnpm certs:create && pnpm certs:copy",
     "certs:create": "mkdir -p .ssl && openssl req -x509 -nodes -newkey rsa:2048 -keyout .ssl/key.pem -out .ssl/cert.pem -days 365 -subj '/CN=localhost'",
     "certs:copy": "pnpm certs:copy-web",
     "certs:copy-web": "mkdir -p web/.ssl && cp -r .ssl web",
+    "docker": "docker-compose -p -f docker-compose.yml up -d --build --remove-orphans",
+    "docker:dev": "docker-compose -p -f docker-compose.yml up -d",
+    "changeset:status": "changeset status --verbose",
+    "changeset:version": "changeset version",
+    "changeset:tag": "changeset tag",
     "prepare": "husky",
     "commit": "cz"
   },
   "author": "creativebrandon",
   "license": "ISC",
   "devDependencies": {
+    "@changesets/cli": "^2.27.1",
     "cz-conventional-changelog": "^3.3.0",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.2",
