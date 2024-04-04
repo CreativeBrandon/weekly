@@ -1,0 +1,60 @@
+name: Release - Version & Changeset PR
+
+on:
+  push:
+    branches:
+      - main
+
+concurrency: ${{ github.workflow }}-${{ github.ref }}
+
+permissions:
+  contents: write # to create release (changesets/action)
+  pull-requests: write
+  packages: write
+
+jobs:
+  release:
+    name: Version
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version:
+          - '20.x'
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8
+
+      - name: Setup Node.js ${{ matrix.node-version}}
+        uses: actions/setup-node@v4 
+        with:
+          registry-url: 'https://npm.pkg.github.com'
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Create Release Pull Request
+        id: changesets
+        uses: changesets/action@v1
+        env:
+          HUSKY: 0
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          version: pnpm changeset:version
+          commit: 'chore: update versions'
+          title: 'chore: update versions'
+      
+      - name: Tag
+        run: pnpm changeset:tag
+
+      - name: Push tags
+        run: git push --follow-tags
