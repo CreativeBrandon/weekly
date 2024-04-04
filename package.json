@@ -17,6 +17,7 @@
     "changeset:status": "changeset status --verbose",
     "changeset:version": "changeset version",
     "changeset:tag": "changeset tag",
+    "changeset": "changeset",
     "prepare": "husky",
     "commit": "cz"
   },
