@@ -1,9 +1,12 @@
 {
-  "name": "weekly",
+  "name": "@creativebrandon/weekly",
   "description": "<h3 align=\"center\">weekly Diary App</h3> <br/>",
   "workspaces": [
     "web"
   ],
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
   "scripts": {
     "certs:generate": "pnpm certs:create && pnpm certs:copy",
     "certs:create": "mkdir -p .ssl && openssl req -x509 -nodes -newkey rsa:2048 -keyout .ssl/key.pem -out .ssl/cert.pem -days 365 -subj '/CN=localhost'",
@@ -30,7 +33,7 @@
     "*.{ts,tsx,js,jsx}": [
       "eslint --cache . --fix"
     ],
-    "web/*.{css,json}": [
+    "web/!(*package).{css,json}": [
       "prettier --fix"
     ]
   },
